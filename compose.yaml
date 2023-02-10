@@ -1,0 +1,26 @@
+version: "3.2"
+
+services:
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer2
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - type: volume
+        source: portainer
+        target: /data
+        volume:
+          nocopy: true
+
+    restart: always
+
+volumes:
+  portainer:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.7.1.122,nolock,soft,rw"
+      device: ":/home/containerd/docker-hmg/volumes/portainer"
